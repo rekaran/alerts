@@ -11,6 +11,10 @@ var user_tokens = {};
 var db_tokens = apiManager.model("deviceTokens", new mongoose.Schema({},{ strict: false }), "deviceTokens");
 var db_admin = apiManager.model("admin_calls", new mongoose.Schema({},{ strict: false }), "admin_calls");
 
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
 let sendNotification = async tos =>{
     tos.forEach(to => {
         to.token.forEach(t=>{
@@ -32,10 +36,12 @@ let sendNotification = async tos =>{
 router.post("/sendadminnotification", (req, res, next)=>{
     try {
         let notifications = [];
+        let _body = `Admin has triggered ${req.body.type} signal for ${capitalize(req.body.coin)}`
         Object.keys(user_tokens).forEach(u=>{
-            notifications.push({token: user_tokens[u].fcm, title: req.body.title, body: req.body.body})
+            notifications.push({token: user_tokens[u].fcm, title: "Admin Call", body: _body})
         })
         sendNotification(notifications);
+        db_admin.updateOne(req.body,req.body,{upsert: true})
         res.send({ status: 200, message: `Successfully send the notification`});
     } catch (error) {
         res.send({ status: 400, message: `Error - ${error}`});
