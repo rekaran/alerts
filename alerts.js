@@ -180,7 +180,7 @@ let signalAlert = async data =>{
 
 setInterval(() => {
     prepairForPriceNotification();
-}, 5000);
+}, 300000);
 userTokens();
 
 // Upstream
