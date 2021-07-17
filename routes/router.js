@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const axios = require("axios");
 const Mongoose = require('mongoose').Mongoose;
 
 var apiManager = new Mongoose({ useUnifiedTopology: true });
@@ -13,6 +14,11 @@ var db_admin = apiManager.model("admin_calls", new mongoose.Schema({},{ strict: 
 
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
+let header = {
+    'Content-Type': 'application/json',
+    'Authorization': 'key=AAAAZegd2IM:APA91bEoVGqCKiVI6e8G3lUSgbUVurg67tjtWhxyrXV-u1Zf_F5zvmuqBFZ8R9ffDbXgWoLsuTN7eJ8QpTyBssX_abENF2kVxmD1Ysii-1hoahtnvnz_-oO7Q6gukMQM9cGA89Yv1mBC'
 }
 
 let sendNotification = async tos =>{
@@ -36,12 +42,12 @@ let sendNotification = async tos =>{
 router.post("/sendadminnotification", (req, res, next)=>{
     try {
         let notifications = [];
-        let _body = `Admin has triggered ${req.body.type} signal for ${capitalize(req.body.coin)}`
+        let _body = `Admin has given ${req.body.type} signal for ${capitalize(req.body.coin)}.`
         Object.keys(user_tokens).forEach(u=>{
-            notifications.push({token: user_tokens[u].fcm, title: "Admin Call", body: _body})
+            notifications.push({token: user_tokens[u].fcm, title: "Admin Call", body: _body, img: req.body.image})
         })
         sendNotification(notifications);
-        db_admin.updateOne(req.body,req.body,{upsert: true})
+        db_admin.updateOne(req.body,req.body,{upsert: true}).exec()
         res.send({ status: 200, message: `Successfully send the notification`});
     } catch (error) {
         res.send({ status: 400, message: `Error - ${error}`});
@@ -100,4 +106,4 @@ async function getData() {
 userTokens();
 getData();
 
-module.exports = router;
+module.exports = {router};
