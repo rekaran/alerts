@@ -146,6 +146,7 @@ async function getData() {
                 if(change.fullDocument.web.mobile) mobs.push(change.fullDocument.web.mobile);
             }
             user_tokens[change.fullDocument.userId] = {fcm: toks, mobile: mobs};
+            console.log(user_tokens[change.fullDocument.userId])
         } catch (error) {
             console.log("User Token updation error")
         }
