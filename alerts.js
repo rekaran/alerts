@@ -95,7 +95,7 @@ let prepairForPriceNotification = async () =>{
                 if(Object.keys(bulk_n).includes(s.get("userId")))bulk_n[s.get("userId")].push({title: _text, ts: new Date().getTime()});
                 else bulk_n[s.get("userId")] = [{title: _text, ts: new Date().getTime()}];
             });
-            console.log(notification)
+            console.log(notifications)
             sendNotification(notifications);
             if(bulk_p.length > 0) db_prices.bulkWrite(bulk_p);
             // update notifications
