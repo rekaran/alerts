@@ -80,7 +80,6 @@ let prepairForPriceNotification = async () =>{
             queries.push({"coin": c, "state": 1, "trigger": "up", "price": {$lte: mycoins[c]}})
             queries.push({"coin": c, "state": 1, "trigger": "down", "price": {$gte: mycoins[c]}})
         });
-        console.log(mycoins)
         if(queries.length > 0){
             let signal_list = await db_prices.find({$or: queries}).exec();
             console.log(signal_list)
@@ -96,6 +95,7 @@ let prepairForPriceNotification = async () =>{
                 if(Object.keys(bulk_n).includes(s.get("userId")))bulk_n[s.get("userId")].push({title: _text, ts: new Date().getTime()});
                 else bulk_n[s.get("userId")] = [{title: _text, ts: new Date().getTime()}];
             });
+            console.log(notification)
             sendNotification(notifications);
             if(bulk_p.length > 0) db_prices.bulkWrite(bulk_p);
             // update notifications
