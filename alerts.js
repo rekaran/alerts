@@ -23,7 +23,7 @@ let header = {
     'Authorization': 'key=AAAAZegd2IM:APA91bEoVGqCKiVI6e8G3lUSgbUVurg67tjtWhxyrXV-u1Zf_F5zvmuqBFZ8R9ffDbXgWoLsuTN7eJ8QpTyBssX_abENF2kVxmD1Ysii-1hoahtnvnz_-oO7Q6gukMQM9cGA89Yv1mBC'
 }
 
-let coins = {}
+let coins = {"bitcoin": 48000}
 
 let sendNotification = async tos =>{
     tos.forEach(to => {
@@ -80,8 +80,10 @@ let prepairForPriceNotification = async () =>{
             queries.push({"coin": c, "state": 1, "trigger": "up", "price": {$lte: mycoins[c]}})
             queries.push({"coin": c, "state": 1, "trigger": "down", "price": {$gte: mycoins[c]}})
         });
+        console.log(queries)
         if(queries.length > 0){
             let signal_list = await db_prices.find({$or: queries}).exec();
+            console.log(signal_list)
             let bulk_p = [];
             let bulk_n = {};
             signal_list.forEach(s=>{
@@ -94,6 +96,7 @@ let prepairForPriceNotification = async () =>{
                 if(Object.keys(bulk_n).includes(s.get("userId")))bulk_n[s.get("userId")].push({title: _text, ts: new Date().getTime()});
                 else bulk_n[s.get("userId")] = [{title: _text, ts: new Date().getTime()}];
             });
+            console.log(notifications)
             sendNotification(notifications);
             if(bulk_p.length > 0) db_prices.bulkWrite(bulk_p);
             // update notifications
@@ -183,6 +186,6 @@ setInterval(() => {
     prepairForPriceNotification();
 }, 300000);
 userTokens();
-
 // Upstream
 getData();
+prepairForPriceNotification();
