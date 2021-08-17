@@ -23,7 +23,7 @@ let header = {
     'Authorization': 'key=AAAAZegd2IM:APA91bEoVGqCKiVI6e8G3lUSgbUVurg67tjtWhxyrXV-u1Zf_F5zvmuqBFZ8R9ffDbXgWoLsuTN7eJ8QpTyBssX_abENF2kVxmD1Ysii-1hoahtnvnz_-oO7Q6gukMQM9cGA89Yv1mBC'
 }
 
-let coins = {"bitcoin": 48000}
+let coins = {}
 
 let sendNotification = async tos =>{
     tos.forEach(to => {
@@ -72,7 +72,7 @@ function capitalize(string) {
 }
 
 let prepairForPriceNotification = async () =>{
-    try {
+    // try {
         let mycoins = {...coins};
         coins = {};
         let queries = [];
@@ -106,9 +106,9 @@ let prepairForPriceNotification = async () =>{
             });
             if(bulk_u.length > 0) db_user.bulkWrite(bulk_u);
         }
-    } catch (error) {
-        console.log("error while preparing for notification")
-    }
+    // } catch (error) {
+    //     console.log("error while preparing for notification")
+    // }
 }
 
 let userTokens = async () => {
