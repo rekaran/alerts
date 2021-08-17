@@ -90,10 +90,14 @@ let prepairForPriceNotification = async () =>{
             });
             let notifications = [];
             signal_list.forEach(s=>{
-                let _text = s.get("trigger") == "up"? `${capitalize(s.get("coin"))} is more than ${s.get("price")}`:`${capitalize(s.get("coin"))} is less than ${s.get("price")}`;
-                notifications.push({token: user_tokens[s.get("userId")].fcm, title: `${capitalize(s.get("coin"))} Alert`, body: _text})
-                if(Object.keys(bulk_n).includes(s.get("userId")))bulk_n[s.get("userId")].push({title: _text, ts: new Date().getTime()});
-                else bulk_n[s.get("userId")] = [{title: _text, ts: new Date().getTime()}];
+                try{
+                    let _text = s.get("trigger") == "up"? `${capitalize(s.get("coin"))} is more than ${s.get("price")}`:`${capitalize(s.get("coin"))} is less than ${s.get("price")}`;
+                    notifications.push({token: user_tokens[s.get("userId")].fcm, title: `${capitalize(s.get("coin"))} Alert`, body: _text})
+                    if(Object.keys(bulk_n).includes(s.get("userId")))bulk_n[s.get("userId")].push({title: _text, ts: new Date().getTime()});
+                    else bulk_n[s.get("userId")] = [{title: _text, ts: new Date().getTime()}];
+                }catch (error){
+                    console.log("FCM Token not found")
+                }
             });
             console.log(notifications)
             sendNotification(notifications);
@@ -148,7 +152,6 @@ async function getData() {
                 if(change.fullDocument.web.mobile) mobs.push(change.fullDocument.web.mobile);
             }
             user_tokens[change.fullDocument.userId] = {fcm: toks, mobile: mobs};
-            console.log(user_tokens[change.fullDocument.userId])
         } catch (error) {
             console.log("User Token updation error")
         }
