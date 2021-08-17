@@ -72,7 +72,7 @@ function capitalize(string) {
 }
 
 let prepairForPriceNotification = async () =>{
-    // try {
+    try {
         let mycoins = {...coins};
         coins = {};
         let queries = [];
@@ -106,9 +106,9 @@ let prepairForPriceNotification = async () =>{
             });
             if(bulk_u.length > 0) db_user.bulkWrite(bulk_u);
         }
-    // } catch (error) {
-    //     console.log("error while preparing for notification")
-    // }
+    } catch (error) {
+        console.log("error while preparing for notification", error)
+    }
 }
 
 let userTokens = async () => {
