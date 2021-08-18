@@ -82,7 +82,7 @@ let prepairForPriceNotification = async () =>{
         });
         if(queries.length > 0){
             let signal_list = await db_prices.find({$or: queries}).exec();
-            console.log(signal_list)
+            // console.log(signal_list)
             let bulk_p = [];
             let bulk_n = {};
             signal_list.forEach(s=>{
@@ -99,7 +99,7 @@ let prepairForPriceNotification = async () =>{
                     console.log("FCM Token not found")
                 }
             });
-            console.log(notifications)
+            // console.log(notifications)
             sendNotification(notifications);
             if(bulk_p.length > 0) db_prices.bulkWrite(bulk_p);
             // update notifications
@@ -178,6 +178,8 @@ let signalAlert = async data =>{
                 console.log("FCM Token not found")
             }
         });
+        console.log(notifications)
+        sendNotification(notifications);
         let bulk_u = [];
         Object.keys(bulk_n).forEach(u=>{
             bulk_u.push({updateOne:{"filter": {"userId":u}, "update": {$push: {"notification": {$each: bulk_n[u], $sort: { ts: -1 },$slice: 10}}}}})
