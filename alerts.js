@@ -169,10 +169,14 @@ let signalAlert = async data =>{
         
         let bulk_n = {};
         user_list.forEach(s=>{
-            let _text = data.label == "B"? `Buy signal is triggered on ${capitalize(data.coin)}`:`Sell signal is triggered on ${capitalize(data.coin)}`;
-            notifications.push({token: user_tokens[s.get("userId")].fcm, title: `Buy/Sell Alert`, body: _text})
-            if(Object.keys(bulk_n).includes(s.get("userId")))bulk_n[s.get("userId")].push({title: _text, ts: new Date().getTime()});
-            else bulk_n[s.get("userId")] = [{title: _text, ts: new Date().getTime()}];
+            try{
+                let _text = data.label == "B"? `Buy signal is triggered on ${capitalize(data.coin)}`:`Sell signal is triggered on ${capitalize(data.coin)}`;
+                notifications.push({token: user_tokens[s.get("userId")].fcm, title: `Buy/Sell Alert`, body: _text})
+                if(Object.keys(bulk_n).includes(s.get("userId")))bulk_n[s.get("userId")].push({title: _text, ts: new Date().getTime()});
+                else bulk_n[s.get("userId")] = [{title: _text, ts: new Date().getTime()}];
+            }catch (error){
+                console.log("FCM Token not found")
+            }
         });
         let bulk_u = [];
         Object.keys(bulk_n).forEach(u=>{
