@@ -163,7 +163,6 @@ async function getData() {
 }
 
 let signalAlert = async data =>{
-    console.log(data)
     try {
         let user_list = await db_signal.find({coin: data.coin, status: 1}).exec();
         let notifications = [];
@@ -179,7 +178,6 @@ let signalAlert = async data =>{
                 console.log("FCM Token not found")
             }
         });
-        console.log(notifications)
         sendNotification(notifications);
         let bulk_u = [];
         Object.keys(bulk_n).forEach(u=>{
