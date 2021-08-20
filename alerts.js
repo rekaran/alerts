@@ -5,9 +5,9 @@ const WebSocket = require("ws");
 
 // DataBase Connection
 var dataManager = new Mongoose({ useUnifiedTopology: true });
-dataManager.connect("mongodb+srv://verox:Cjd38cdbBjWP7b1K@verox.3g7nh.mongodb.net/Signals?authSource=admin&replicaSet=atlas-4iomyp-shard-0&readPreference=primary&ssl=true&ssl_cert_reqs=CERT_NONE", { useNewUrlParser: true }).then(console.dir("Connecting to MongoDB - DataManager..."));
+dataManager.connect("mongodb+srv://verox:Cjd38cdbBjWP7b1K@verox.3g7nh.mongodb.net/Signals?authSource=admin&replicaSet=atlas-4iomyp-shard-0&readPreference=primary&ssl=true&ssl_cert_reqs=CERT_NONE", { useNewUrlParser: true }).then();
 var apiManager = new Mongoose({ useUnifiedTopology: true });
-apiManager.connect("mongodb+srv://verox:Cjd38cdbBjWP7b1K@verox.3g7nh.mongodb.net/Verox?authSource=admin&replicaSet=atlas-4iomyp-shard-0&readPreference=primary&ssl=true&ssl_cert_reqs=CERT_NONE", { useNewUrlParser: true }).then(console.dir("Connecting to MongoDB - DataManager..."));
+apiManager.connect("mongodb+srv://verox:Cjd38cdbBjWP7b1K@verox.3g7nh.mongodb.net/Verox?authSource=admin&replicaSet=atlas-4iomyp-shard-0&readPreference=primary&ssl=true&ssl_cert_reqs=CERT_NONE", { useNewUrlParser: true }).then();
 
 // Collection Objects
 var db_signals = dataManager.model("signals", new mongoose.Schema({},{ strict: false }), "signals");
@@ -163,6 +163,7 @@ async function getData() {
 }
 
 let signalAlert = async data =>{
+    console.log(data)
     try {
         let user_list = await db_signal.find({coin: data.coin, status: 1}).exec();
         let notifications = [];
