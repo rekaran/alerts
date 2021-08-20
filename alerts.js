@@ -10,7 +10,7 @@ var apiManager = new Mongoose({ useUnifiedTopology: true });
 apiManager.connect("mongodb+srv://verox:Cjd38cdbBjWP7b1K@verox.3g7nh.mongodb.net/Verox?authSource=admin&replicaSet=atlas-4iomyp-shard-0&readPreference=primary&ssl=true&ssl_cert_reqs=CERT_NONE", { useNewUrlParser: true }).then();
 
 // Collection Objects
-var db_signals = dataManager.model("signals", new mongoose.Schema({},{ strict: false }), "signals");
+var db_signals = dataManager.model("signals_new", new mongoose.Schema({},{ strict: false }), "signals_new");
 var db_prices = apiManager.model("price", new mongoose.Schema({},{ strict: false }), "price");
 var db_tokens = apiManager.model("deviceTokens", new mongoose.Schema({},{ strict: false }), "deviceTokens");
 var db_user = apiManager.model("user", new mongoose.Schema({},{ strict: false }), "user");
